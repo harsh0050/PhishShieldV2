@@ -15,6 +15,19 @@ const Userschema = new mongoose.Schema({
 });
 const UserModel = mongoose.model("Users", Userschema);
 
+async function isAdmin(userId) {
+  try {
+    const user = await UserModel.findById(userId);
+
+    if (!user) {
+      return false;
+    } else {
+      return user.isAdmin;
+    }
+  } catch (err) {
+    return false;
+  }
+}
 async function getUserCount() {
   try {
     const count = await UserModel.countDocuments();
@@ -62,4 +75,4 @@ async function getRequestCount(userId) {
   }
 }
 
-module.exports = { UserModel, incrementRequestCount, getUserCount };
+module.exports = { UserModel, incrementRequestCount, getUserCount, isAdmin };

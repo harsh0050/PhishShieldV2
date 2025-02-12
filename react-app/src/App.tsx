@@ -9,7 +9,7 @@ import Signup from './Signup'
 import Login from './Login'
 import Home from './Home'
 import ProtectedRoute from './ProtectedRoute';
-import AdminDashboard from './AdminDashboard';
+import Dashboard from './Dashboard.tsx';
 
 
 function App() {
@@ -26,7 +26,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path='/dashboard' element={<AdminDashboard/>}></Route>
+        <Route path='/dashboard' element={<Dashboard/>}></Route>
       
     </Routes>
     </BrowserRouter>
