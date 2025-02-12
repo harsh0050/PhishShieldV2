@@ -1,8 +1,16 @@
 const axios = require("axios");
 const config = require("../utils/constants"); // Import config.js
+const { UserModel, incrementRequestCount } = require("../models/User");
+const { incrementTotalRequestCount } = require("../models/Metadata");
 
 const checker = async (req, res) => {
   const urlToCheck = req.body.url;
+
+  const userId = req.headers["userid"];
+  console.log(req.headers);
+  if (!userId) {
+    return res.status(400).send("userId is missing in the header");
+  }
   console.log(urlToCheck);
 
   if (!urlToCheck) {
@@ -34,6 +42,9 @@ const checker = async (req, res) => {
 
       if (getResponse.status === 200) {
         const phishingStatus = checkPhishing(getResponse.data);
+        await incrementRequestCount(userId);
+        await incrementTotalRequestCount();
+
         return res
           .status(200)
           .json({ url: urlToCheck, phishing_status: phishingStatus });

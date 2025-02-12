@@ -9,6 +9,7 @@ import Signup from './Signup'
 import Login from './Login'
 import Home from './Home'
 import ProtectedRoute from './ProtectedRoute';
+import AdminDashboard from './AdminDashboard';
 
 
 function App() {
@@ -25,14 +26,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-      <Route
-          path="/home"
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          }
-        />
+        <Route path='/dashboard' element={<AdminDashboard/>}></Route>
       
     </Routes>
     </BrowserRouter>

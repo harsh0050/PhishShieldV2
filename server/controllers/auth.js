@@ -1,9 +1,10 @@
-const UserModel = require("../models/User");
+const {UserModel} = require("../models/User");
 
 exports.login = (req, res) => {
   const { email, password } = req.body;
   console.log(email);
   UserModel.findOne({ email: email }).then((user) => {
+    
     if (user) {
       if (user.password == password) {
         res.json({ status: "success", userId: user._id.toString() });

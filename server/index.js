@@ -4,6 +4,7 @@ const cors = require("cors");
 const UserModel = require("./models/User");
 const userRoute = require("./routes/userRoute");
 const apiRoute = require("./routes/apiRoute");
+const metadataRoute = require("./routes/metadataRoute");
 
 const app = express();
 mongoose.connect("mongodb://localhost:27017/user");
@@ -16,12 +17,11 @@ app.use(cors());
 
 app.use("/auth", userRoute);
 app.use("/api", apiRoute);
+app.use("/metadata", metadataRoute);
 
 app.get("/health", (req, res) => {
   res.status(200).send("OK");
 });
-
-const axios = require("axios");
 
 // app.post("/login", (req, res) => {
 //   const { email, password } = req.body;

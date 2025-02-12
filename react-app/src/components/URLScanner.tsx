@@ -41,6 +41,7 @@ export default function URLScanner() {
       const response = await axios.post(reqUrl, {url}, {
         headers: {
           'Content-Type': 'application/json',
+          'Userid': localStorage.getItem("UserId")
         },
       });
 
