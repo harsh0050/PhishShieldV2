@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Globe, Shield } from 'lucide-react';
+import axios from "axios";
 
 export default function URLScanner() {
   const [url, setUrl] = useState('');
@@ -18,30 +19,47 @@ export default function URLScanner() {
 
 
     // Simulate scanning
-    let url = document.getElementById("urlScan")?.value;
+    const url = document.getElementById("urlScan")?.value;
     // console.log("emailTxt = " + emailTxt);
     // try {
     // console.log(url);
-    let reqUrl = 'http://127.0.0.1:5000/check_url?url='+url;
-    const response = await fetch( reqUrl , {  // Replace with your server's URL
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },  // Sending the email entered by the user
-    });
+    // let reqUrl = 'http://localhost:8080/check_url?url='+url;
+    // const response = await fetch( reqUrl , {  // Replace with your server's URL
+    //   method: 'GET',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },  // Sending the email entered by the user
+    // });
 
-    if (!response.ok) {
-      throw new Error('Failed to analyze email. Please try again.');
+    // if (!response.ok) {
+    //   throw new Error('Failed to analyze email. Please try again.');
+    // }
+
+    const reqUrl = 'http://localhost:8080/api/check_url';  // Use the base URL for POST request
+
+    try {
+      const response = await axios.post(reqUrl, {url}, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      // Handle the response
+      console.log(response.data); // Example: logging the response data
+      const data = response.data;  // With axios, the response data is directly available on `response.data`
+
+      console.log(data.phishing_status);
+
+      setScanResult({
+        status: data.phishing_status === "phishing" ? "Phishing" : "Safe",
+        lastSeen: '2024-03-15',
+        registration: '2023-12-01',
+      });
+    } catch (error) {
+      console.error('Error during request:', error);
+    } finally{
+      setIsScanning(false);
     }
-
-    const data = await response.json();
-    console.log(data.phishing_status);
-    setScanResult({
-      status: data.phishing_status == "phishing" ? "Phishing" : "Safe",
-      lastSeen: '2024-03-15',
-      registration: '2023-12-01',
-    });
-    setIsScanning(false);
   };
 
   return (

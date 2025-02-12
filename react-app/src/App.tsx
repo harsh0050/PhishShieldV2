@@ -3,10 +3,12 @@ import { Shield } from 'lucide-react';
 import EmailAnalyzer from './components/EmailAnalyzer';
 import URLScanner from './components/URLScanner';
 import ThreatMap from './components/ThreatMap';
+import 'bootstrap/dist/css/bootstrap.min.css'
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import Signup from './Signup'
 import Login from './Login'
 import Home from './Home'
+import ProtectedRoute from './ProtectedRoute';
 
 
 function App() {
@@ -15,7 +17,23 @@ function App() {
     <Routes>
       <Route path='/register' element={<Signup />}></Route>
       <Route path='/login' element={<Login />}></Route>
-      <Route path='/home' element={<Home />}></Route>
+      <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+      <Route
+          path="/home"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+      
     </Routes>
     </BrowserRouter>
   )

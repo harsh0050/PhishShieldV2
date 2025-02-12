@@ -12,17 +12,18 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:3041/login", { email, password })
+      .post("http://localhost:8080/auth/login", { email, password })
       .then((result) => {
         console.log(result);
-        if (result.data === "success") {
+        if (result.data.status === "success") {
+          localStorage.setItem("UserId", result.data.userId);
           navigate("/home");
         }
       });
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center bg secondary vh-100">
+    <div className="d-flex justify-content-center align-items-center bg-secondary vh-100">
       <div className="bg-white p-3 rounded w-25">
         <h2> Login</h2>
         <form onSubmit={handleSubmit}>
@@ -57,7 +58,7 @@ function Login() {
         </form>
         <p> Don't have an account? </p>
         <Link
-          to="/register"
+          to="/signup"
           className="btn btn-default border w-100 bg-light rounded-0 text-decoration-none"
         >
           Signup

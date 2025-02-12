@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Upload, AlertCircle, Mail } from 'lucide-react';
-
+import axios from "axios"
 
 export default function EmailAnalyzer() {
   const [emailContent, setEmailContent] = useState('');
@@ -11,32 +11,20 @@ export default function EmailAnalyzer() {
     setIsAnalyzing(true);
     setIsAnalyzing(true);
     let emailTxt = document.getElementById("email-textarea")?.innerHTML;
-    // console.log("emailTxt = " + emailTxt);
-    // try {
-    const response = await fetch('http://127.0.0.1:5000/email', {  // Replace with your server's URL
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ "email-text": emailTxt }),  // Sending the email entered by the user
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to analyze email. Please try again.');
+    try {
+      const response = await axios.post('http://localhost:8080/api/analyze_email', 
+        { "emailText": emailTxt }, 
+      );
+    
+      // Assuming your API response has a `probability` field
+      console.log(response.data.text);
+      setProbability(parseFloat(response.data.probability));  // Save the full response for further display
+    
+    } catch (err) {
+      console.log("failed sending request\n" + err);  // If there’s an error, show it to the user
+    } finally {
+      setIsAnalyzing(false);  // Stop loading state
     }
-
-    const data = await response.json();
-    // Assuming your API response has a `probability` field
-    // Set the probability received from the server
-
-    console.log(data.text);
-    setProbability(parseFloat(data.probability));  // Save the full response for further display
-
-    // } catch (err) {
-    //   console.log("failed sending request\n" + err)  // If there’s an error, show it to the user
-    // } finally {
-    setIsAnalyzing(false);  // Stop loading state
-    // }
   };
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
